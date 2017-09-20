@@ -1,0 +1,51 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, sans-serif;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border: 1px solid #e9ecef;
+  text-align: left;
+}
+
+table th, table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border: 1px solid #e9ecef;
+}
+
+table td:not(:first-child), table th:not(:first-child) {
+  text-align: center;
+}
+
+table td:last-child {
+  cursor: pointer;
+}
+
+table td:last-child:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #e9ecef;
+}
+
+table tbody+tbody {
+  border-top: 2px solid #e9ecef;
+}

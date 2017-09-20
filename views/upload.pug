@@ -1,0 +1,6 @@
+extends layout
+
+block content
+  form(method='POST', action='/api', enctype='multipart/form-data')
+    input#fileInput(type='file', multiple, name='video')
+    input#submit(type='submit', value='Submit')
