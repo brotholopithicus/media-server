@@ -16,7 +16,7 @@ router.post('/', upload.array('video', 12), async(req, res, next) => {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const data = req.files.map(file => collection.insert(file));
     db.saveDatabase();
-    return res.json(data);
+    return res.json({ success: true, message: 'upload successful', data});
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }

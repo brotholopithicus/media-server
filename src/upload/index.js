@@ -14,7 +14,7 @@ function handleFormSubmission(e) {
       progressBar.value = progress;
     }
   });
-  xhr.addEventListener('load', () => {
+  xhr.upload.addEventListener('load', () => {
     window.location.pathname = '/';
   });
   xhr.send(formData);
