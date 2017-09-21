@@ -16,7 +16,19 @@ router.post('/', upload.array('video', 12), async(req, res, next) => {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const data = req.files.map(file => collection.insert(file));
     db.saveDatabase();
-    return res.json({ success: true, message: 'upload successful', data});
+    return res.json({ success: true, message: 'upload successful', data });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
+});
+
+router.delete('/video/:id', async(req, res, next) => {
+  try {
+    const collection = await loadCollection(COLLECTION_NAME, db);
+    const result = collection.get(req.params.id);
+    collection.remove(result);
+    db.saveDatabase();
+    return res.json({ success: true, message: 'delete successful', result });
   } catch (err) {
     return res.json({ success: false, message: err.message });
   }

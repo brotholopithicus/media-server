@@ -1,8 +1,22 @@
 extends layout
 
+block stylesheets
+  link(rel='stylesheet', href='/css/upload.bundle.css')
+
 block content
-  form#uploadForm(method='POST', action='/api', enctype='multipart/form-data')
-    input#fileInput(type='file', multiple, name='video')
-    input#submit(type='submit', value='Submit')
-  progress#progressBar(value='0', min='0', max='100')
+  a#backButton.btn.btn-primary(href='/') ← Back
+  .upload-container
+    h2 Upload
+    form#uploadForm.input-group(method='POST', action='/api', enctype='multipart/form-data')
+      input#fileInput(type='file', multiple, name='video')
+      input#submit(type='submit', value='Submit')
+    .progress
+      .progress-bar
+
+  .delete-container
+    h2 Delete
+    .input-group
+      select.videoSelect
+      .button-container
+        button#deleteSubmitButton.btn.btn-danger Delete
   script(src='/js/upload.bundle.js')

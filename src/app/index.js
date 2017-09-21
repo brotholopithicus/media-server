@@ -6,9 +6,9 @@ const videoList = document.querySelector('.videoList');
 fetch('/api')
   .then(res => res.json())
   .then(res => {
-    res.forEach(file => {
+    res.forEach((file, index) => {
       const row = document.createElement('tr');
-      const num = createElement('th', { text: file.id });
+      const num = createElement('th', { text: index + 1 });
       const name = createElement('td', { text: file.name });
       const mimetype = createElement('td', { text: file.mimetype });
       const size = createElement('td', { text: (parseInt(file.size) / (1000 * 1000)).toFixed(2) + ' MB' });

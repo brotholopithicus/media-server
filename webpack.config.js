@@ -4,6 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: {
+    layout: './src/layout',
     app: ['babel-polyfill', './src/app'],
     upload: './src/upload'
   },
