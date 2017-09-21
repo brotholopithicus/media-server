@@ -1,6 +1,11 @@
 const Loki = require('lokijs');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+
+function getLocalAddress() {
+  return os.networkInterfaces().en1.find(interface => interface.family === 'IPv4').address || '0.0.0.0';
+}
 
 function cleanDirectory(dirPath) {
   fs.readdir(dirPath, (err, files) => {
@@ -40,5 +45,6 @@ const filter = {
 module.exports = {
   loadCollection,
   filter,
-  cleanDirectory
+  cleanDirectory,
+  getLocalAddress
 };

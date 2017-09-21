@@ -6,7 +6,7 @@ const router = require('express').Router();
 const multer = require('multer');
 
 const { DB_NAME, COLLECTION_NAME, db, UPLOAD_PATH } = require('../config');
-const { loadCollection, filter } = require('../utils');
+const { loadCollection, filter, getLocalAddress } = require('../utils');
 
 const upload = multer({ dest: `${UPLOAD_PATH}/`, fileFilter: filter.videos });
 
@@ -67,7 +67,8 @@ router.get('/link/:id', async(req, res, next) => {
       'Content-Type': 'application/m3u',
       'Content-Disposition': `attachment; filename='playlist.vlc'`
     });
-    res.write('#EXTM3U\nhttp://192.168.1.3:3000/api/video/' + req.params.id);
+    const ipv4Addr = getLocalAddress();
+    res.write(`#EXTM3U\nhttp://${ipv4Addr}:3000/api/video/${req.params.id}`);
     res.end();
   } catch (err) {
     return res.json({ sucess: false, message: err.message });
@@ -80,7 +81,8 @@ router.get('/', async(req, res, next) => {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const data = collection.data.map(file => {
       const { $loki, originalname, encoding, mimetype, size } = file;
-      return { id: $loki, name: originalname, encoding, mimetype, size };
+      const ipv4Addr = getLocalAddress();
+      return { id: $loki, name: originalname, encoding, mimetype, size, ipv4Addr };
     });
     return res.json(data);
   } catch (err) {
