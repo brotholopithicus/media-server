@@ -1,6 +1,8 @@
 extends layout
 
 block content
-  form(method='POST', action='/api', enctype='multipart/form-data')
+  form#uploadForm(method='POST', action='/api', enctype='multipart/form-data')
     input#fileInput(type='file', multiple, name='video')
     input#submit(type='submit', value='Submit')
+  progress#progressBar(value='0', min='0', max='100')
+  script(src='/js/upload.bundle.js')

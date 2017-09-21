@@ -1,14 +1,17 @@
 extends layout
 
+block stylesheets
+  link(rel='stylesheet', href='/css/app.bundle.css')
 block content
   table
     thead
       tr
+        th #
         th name
-        th encoding
         th mimetype
         th size
         th watch
+        th copy link
     tbody.videoList
-    
-  script(src='/js/app.js')
+
+  script(src='/js/app.bundle.js')
