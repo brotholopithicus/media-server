@@ -67,8 +67,7 @@ router.get('/link/:id', async(req, res, next) => {
       'Content-Type': 'application/m3u',
       'Content-Disposition': `attachment; filename='playlist.vlc'`
     });
-    const ipv4Addr = getLocalAddress();
-    res.write(`#EXTM3U\nhttp://${ipv4Addr}:3000/api/video/${req.params.id}`);
+    res.write(`#EXTM3U\nhttp://${req.hostname}:3000/api/video/${req.params.id}`);
     res.end();
   } catch (err) {
     return res.json({ sucess: false, message: err.message });
@@ -81,8 +80,7 @@ router.get('/', async(req, res, next) => {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const data = collection.data.map(file => {
       const { $loki, originalname, encoding, mimetype, size } = file;
-      const ipv4Addr = getLocalAddress();
-      return { id: $loki, name: originalname, encoding, mimetype, size, ipv4Addr };
+      return { id: $loki, name: originalname, encoding, mimetype, size, addr: req.hostname };
     });
     return res.json(data);
   } catch (err) {
