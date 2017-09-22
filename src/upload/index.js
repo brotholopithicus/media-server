@@ -60,12 +60,17 @@ fetch('/api')
 
 deleteSubmitButton.addEventListener('click', handleDeleteSubmitButton)
 
-function handleDeleteSubmitButton() {
-  const selectedIndex = videoSelect.selectedIndex;
-  const id = videoSelect.options[selectedIndex].value;
-  fetch(`/api/video/${id}`, { method: 'DELETE' })
-    .then(res => res.json())
-    .then(res => {
-      videoSelect.removeChild(videoSelect.options[selectedIndex]);
-    });
+async function handleDeleteSubmitButton() {
+  try {
+    await Promise.all(
+      [...videoSelect.options]
+      .filter(option => option.selected)
+      .map(async(selected) => {
+        await fetch(`/api/video/${selected.value}`, { method: 'DELETE' }).then(res => res.json());
+        videoSelect.removeChild(selected);
+      })
+    );
+  } catch (err) {
+    console.log(err);
+  }
 }

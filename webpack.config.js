@@ -6,7 +6,7 @@ module.exports = {
   entry: {
     layout: './src/layout',
     app: ['babel-polyfill', './src/app'],
-    upload: './src/upload'
+    upload: ['babel-polyfill', './src/upload']
   },
   output: {
     path: path.resolve(__dirname, 'public'),

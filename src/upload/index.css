@@ -64,6 +64,8 @@ select {
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0.25rem;
   appearance: none;
+  height: 10rem;
+  font-size: 1rem;
 }
 
 select:focus {
@@ -138,6 +140,7 @@ select:disabled {
 .file-control:lang(en)::before {
   content: "Browse";
 }
+
 .upload-info h2 {
   display: flex;
   flex-direction: row;

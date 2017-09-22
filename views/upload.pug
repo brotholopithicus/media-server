@@ -21,7 +21,7 @@ block content
   .delete-container
     h2 Delete
     .input-group
-      select.videoSelect
-        option Select Media File...
+      select.videoSelect(multiple)
+        option(disabled) Select Media File...
       input#deleteSubmitButton.btn.btn-danger(type='submit', value='Delete')
   script(src='/js/upload.bundle.js')
