@@ -64,6 +64,15 @@ table tr>*:not(.name) {
   max-width: 2rem;
 }
 
+th {
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+th:hover {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
 table tr .watch, table tr .copy {
   cursor: pointer;
   overflow: auto;
@@ -127,4 +136,8 @@ a#upload {
   bottom: 0;
   right: 0;
   margin: 20px;
+}
+
+th.sort {
+  background-color: rgba(0, 0, 0, 0.075);
 }

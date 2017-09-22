@@ -7,10 +7,10 @@ block content
     table
       thead
         tr
-          th #
-          th.name name
-          th mimetype
-          th size
+          th(data-sort='num') #
+          th.name(data-sort='name') name
+          th(data-sort='mimetype') mimetype
+          th(data-sort='size') size
           th.watch watch
           th.copy link
       tbody.videoList

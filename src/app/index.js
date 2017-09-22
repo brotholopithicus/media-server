@@ -8,6 +8,7 @@ fetch('/api')
   .then(res => {
     res.forEach((file, index) => {
       const row = document.createElement('tr');
+      row.dataset.file = JSON.stringify(Object.assign({}, file, { num: index + 1 }));
       const num = createElement('th', { text: index + 1 });
       const name = createElement('td', { text: file.name, classe: ['name'] });
       const mimetype = createElement('td', { text: file.mimetype });
@@ -63,4 +64,44 @@ function createElement(tag, options = {}) {
     options.classes.forEach(className => el.classList.add(className));
   }
   return el;
+}
+
+const columns = document.querySelectorAll('th[data-sort]');
+columns.forEach(col => col.addEventListener('click', handleColumnHeaderClick));
+
+function handleColumnHeaderClick(e) {
+  const key = this.dataset.sort;
+  if (this.classList.contains('sort')) {
+    const bodyRows = [...document.querySelectorAll('tbody tr')].reverse();
+    const clonedVideoList = document.querySelector('.videoList').cloneNode();
+    bodyRows.forEach(row => clonedVideoList.append(row));
+    document.querySelector('table').replaceChild(clonedVideoList, document.querySelector('.videoList'));
+    this.textContent = this.textContent.slice(0, -1) + (this.textContent.slice(-2) === ' ↓' ? ' ↑' : ' ↓');
+  } else {
+    columns.forEach(col => {
+      if (col.textContent.slice(-1) === '↓' || col.textContent.slice(-1) === '↑') {
+        col.textContent = col.textContent.slice(0, -2);
+      }
+      col.classList.remove('sort');
+    });
+    this.classList.add('sort');
+    const bodyRows = [...document.querySelectorAll('tbody tr')].sort((a, b) => {
+      [a, b] = [JSON.parse(a.dataset.file), JSON.parse(b.dataset.file)];
+      console.log(typeof a[key])
+      return typeof a[key] === 'number' ?
+        a[key] - b[key] : (() => {
+          if (a[key].toLowerCase() < b[key].toLowerCase()) {
+            return -1;
+          } else if (a[key].toLowerCase() > b[key].toLowerCase()) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })();
+    });
+    const clonedVideoList = document.querySelector('.videoList').cloneNode();
+    bodyRows.forEach(row => clonedVideoList.append(row));
+    document.querySelector('table').replaceChild(clonedVideoList, document.querySelector('.videoList'));
+    this.textContent = this.textContent + ' ↑';
+  }
 }
