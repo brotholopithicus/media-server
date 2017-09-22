@@ -21,6 +21,7 @@ function handleFormSubmission(e) {
   submitButton.disabled = true;
   const formData = new FormData(e.target);
   const xhr = new XMLHttpRequest();
+  xhr.setRequestHeader('Content-Type', 'multipart/form-data');
   xhr.open('POST', '/api', true);
   xhr.upload.addEventListener('progress', (e) => {
     if (e.lengthComputable) {
