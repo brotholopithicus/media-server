@@ -78,7 +78,6 @@ nav ul li {
   justify-content: center;
   align-items: center;
   transition: 0.3s;
-  border-bottom: 3px solid transparent;
 }
 
 nav ul a {
@@ -93,7 +92,6 @@ nav ul a {
 
 nav ul li.active {
   background-color: transparent;
-  border-color: rgba(255, 255, 255, 0.5);
 }
 
 nav ul li.active a {

@@ -7,9 +7,13 @@ const fileInput = document.querySelector('input#fileInput');
 const fileControl = document.querySelector('.file-control');
 const speed = document.querySelector('.speed');
 const elapsed = document.querySelector('.elapsed');
+const uploaded = document.querySelector('.uploaded');
+
 fileInput.addEventListener('change', (e) => fileControl.textContent = `${e.target.files.length} files`);
 
 uploadForm.addEventListener('submit', handleFormSubmission);
+
+const bytesToMb = (bytes) => (bytes * 1e-6).toFixed(2);
 
 function handleFormSubmission(e) {
   e.preventDefault();
@@ -20,13 +24,17 @@ function handleFormSubmission(e) {
   xhr.open('POST', '/api', true);
   xhr.upload.addEventListener('progress', (e) => {
     if (e.lengthComputable) {
-      const progress = Math.round((e.loaded * 100) / e.total);
+      const { loaded, total } = e;
+      const progress = Math.round((loaded * 100) / total);
       progressBar.style.width = `${progress}%`;
       progressBar.textContent = `${progress}%`;
       const time = (Date.now() - startTime) / 1000;
-      const uploadSpeed = e.loaded / time;
-      speed.textContent = `${(uploadSpeed / (1000 * 1000)).toFixed(2)} MB/s`;
-      elapsed.textContent = `${time.toFixed(1)} s`;
+      const uploadSpeed = (bytesToMb(loaded) / time).toFixed(2);
+      speed.textContent = `${uploadSpeed} MB/s`;
+      elapsed.textContent = `${time.toFixed(2)} s`;
+      const mbLoaded = bytesToMb(loaded).slice(0, -3);
+      const mbTotal = bytesToMb(total).slice(0, -3);
+      uploaded.textContent = `${mbLoaded} MB of ${mbTotal} MB`;
     }
   });
   xhr.upload.addEventListener('load', () => {
