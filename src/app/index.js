@@ -9,11 +9,11 @@ fetch('/api')
     res.forEach((file, index) => {
       const row = document.createElement('tr');
       const num = createElement('th', { text: index + 1 });
-      const name = createElement('td', { text: file.name });
+      const name = createElement('td', { text: file.name, classe: ['name'] });
       const mimetype = createElement('td', { text: file.mimetype });
       const size = createElement('td', { text: (parseInt(file.size) / (1000 * 1000)).toFixed(2) + ' MB' });
-      const download = createElement('td', { text: '↓', classes: ['hoverable', 'clickable'] });
-      const copyLink = createElement('td', { text: '✂', classes: ['hoverable', 'clickable'] });
+      const download = createElement('td', { text: '↓', classes: ['watch'] });
+      const copyLink = createElement('td', { text: '✂', classes: ['copy'] });
       download.addEventListener('click', () => downloadPlayList(`http://${file.addr}:3000/api/link/${file.id}`));
       copyLink.addEventListener('click', () => copyTextToClipboard(`http://${file.addr}:3000/api/video/${file.id}`));
       [num, name, mimetype, size, download, copyLink].forEach(el => row.appendChild(el));

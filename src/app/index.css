@@ -1,3 +1,7 @@
+.container {
+  margin-top: 1rem;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -9,6 +13,10 @@ table {
   overflow-x: auto;
 }
 
+table>tbody>tr {
+  transition: background-color .25s ease;
+}
+
 tbody tr:hover {
   background-color: rgba(0, 0, 0, 0.075);
 }
@@ -17,18 +25,19 @@ thead {
   background-color: #f4f4f4;
 }
 
+thead th {
+  font-weight: bolder;
+}
+
 table th, table td {
   padding: 0.75rem;
-  vertical-align: top;
+  font-size: 0.8rem;
+  vertical-align: middle;
   border: 1px solid #e9ecef;
 }
 
-table td.clickable {
-  cursor: pointer;
-}
-
-table td.hoverable:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+table td {
+  transition: background-color .25s ease;
 }
 
 table thead th {
@@ -38,6 +47,39 @@ table thead th {
 
 table tbody+tbody {
   border-top: 2px solid #e9ecef;
+}
+
+table tr>* {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+table tr .name {
+  width: 4rem;
+}
+
+table tr>*:not(.name) {
+  width: 2rem;
+  max-width: 2rem;
+}
+
+table tr .watch, table tr .copy {
+  cursor: pointer;
+  overflow: auto;
+  max-width: 1rem;
+  width: 1rem;
+  padding: 0.75rem 0;
+}
+
+table td.watch:hover, table td.copy:hover {
+  background-color: #cfd8dc;
+}
+
+table tr>*:first-child {
+  padding: 0.75rem 0;
+  width: 1rem;
+  max-width: 1rem;
 }
 
 .hidden {

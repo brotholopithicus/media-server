@@ -1,11 +1,15 @@
 doctype html
-html
+html(lang='en-US')
   head
+    meta(charset='utf-8')
+    meta(name='author', content='James Jarvis')
+    metha(name='description', content='local media server gui')
     title= title
     link(rel='stylesheet', href='/css/layout.bundle.css')
 
     block stylesheets
   body
+    include partials/navbar
     block content
 
     script(src='/js/layout.bundle.js')

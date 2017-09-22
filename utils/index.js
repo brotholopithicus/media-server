@@ -7,6 +7,10 @@ function getLocalAddress() {
   return os.networkInterfaces().en1.find(interface => interface.family === 'IPv4').address || '0.0.0.0';
 }
 
+function deleteFile(file) {
+  return new Promise((resolve, reject) => fs.unlink(file, (err) => err ? reject(err) : resolve()));
+}
+
 function cleanDirectory(dirPath) {
   fs.readdir(dirPath, (err, files) => {
     if (err) throw err;
@@ -46,5 +50,6 @@ module.exports = {
   loadCollection,
   filter,
   cleanDirectory,
-  getLocalAddress
+  getLocalAddress,
+  deleteFile
 };

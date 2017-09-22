@@ -1,10 +1,16 @@
-*, *::before, *::after {
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+*, *:before, *:after {
   box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, sans-serif;
+  font-family: 'Roboto', -apple-system, sans-serif;
   font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
@@ -18,6 +24,90 @@ hr {
   margin-bottom: 1rem;
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+a {
+  color: #039be5;
+  text-decoration: none;
+}
+
+ul {
+  padding-left: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+nav {
+  color: #fff;
+  background-color: #2196F3;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+
+nav a {
+  color: #fff;
+}
+
+nav .nav-wrapper {
+  height: 7vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+nav .logo {
+  color: #fff;
+  font-size: 2rem;
+  padding: 0 15px;
+}
+
+nav ul {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 0;
+  line-height: calc(7vh - 1px);
+  height: 7vh;
+}
+
+nav ul li {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+  border-bottom: 3px solid transparent;
+}
+
+nav ul a {
+  transition: 0.3s;
+  font-size: 1rem;
+  width: 10vw;
+  text-align: center;
+  margin: 0;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+nav ul li.active {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+nav ul li.active a {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+nav ul a:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+nav ul li:hover {
+  border-color: rgba(255, 255, 255, 0.7);
 }
 
 .btn {
@@ -89,7 +179,6 @@ a {
   background-color: transparent;
 }
 
-
 .btn-danger {
   color: #fff;
   background-color: #dc3545;
@@ -111,9 +200,32 @@ a {
   border-color: #dc3545;
 }
 
-.btn-danger:active, .btn-danger.active,
-.show > .btn-danger.dropdown-toggle {
+.btn-danger:active, .btn-danger.active, .show>.btn-danger.dropdown-toggle {
   background-color: #c82333;
   background-image: none;
   border-color: #bd2130;
+}
+
+.bg-blue {
+  background-color: #007bff;
+}
+
+.bg-green {
+  background-color: #28a745;
+}
+
+.bg-grey {
+  background-color: #868e96;
+}
+
+.bg-yellow {
+  background-color: #ffc107;
+}
+
+.bg-red {
+  background-color: #dc3545;
+}
+
+.bg-cyan {
+  background-color: #17a2b8;
 }

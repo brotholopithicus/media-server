@@ -6,7 +6,7 @@ const router = require('express').Router();
 const multer = require('multer');
 
 const { DB_NAME, COLLECTION_NAME, db, UPLOAD_PATH } = require('../config');
-const { loadCollection, filter, getLocalAddress } = require('../utils');
+const { loadCollection, filter, getLocalAddress, deleteFile } = require('../utils');
 
 const upload = multer({ dest: `${UPLOAD_PATH}/`, fileFilter: filter.videos });
 
@@ -22,10 +22,12 @@ router.post('/', upload.array('video', 12), async(req, res, next) => {
   }
 });
 
+// delete existing media
 router.delete('/video/:id', async(req, res, next) => {
   try {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const result = collection.get(req.params.id);
+    await deleteFile(path.resolve(result.path));
     collection.remove(result);
     db.saveDatabase();
     return res.json({ success: true, message: 'delete successful', result });

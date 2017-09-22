@@ -3,16 +3,16 @@ extends layout
 block stylesheets
   link(rel='stylesheet', href='/css/app.bundle.css')
 block content
-  table
-    thead
-      tr
-        th #
-        th name
-        th mimetype
-        th size
-        th watch
-        th copy link
-    tbody.videoList
-  a#upload.btn.btn-primary(href='/upload') Upload
+  .container
+    table
+      thead
+        tr
+          th #
+          th.name name
+          th mimetype
+          th size
+          th.watch watch
+          th.copy link
+      tbody.videoList
 
   script(src='/js/app.bundle.js')

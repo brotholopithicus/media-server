@@ -4,19 +4,19 @@ block stylesheets
   link(rel='stylesheet', href='/css/upload.bundle.css')
 
 block content
-  a#backButton.btn.btn-primary(href='/') ← Back
   .upload-container
     h2 Upload
     form#uploadForm.input-group(method='POST', action='/api', enctype='multipart/form-data')
-      input#fileInput(type='file', multiple, name='video')
-      input#submit(type='submit', value='Submit')
-    .progress
-      .progress-bar
-
+      label.file
+        input#fileInput.file-input(type='file', multiple, name='video')
+        span.file-control
+      input#submit.btn.btn-primary(type='submit', value='Submit')
+  .progress
+    .progress-bar.bg-cyan
   .delete-container
     h2 Delete
     .input-group
       select.videoSelect
-      .button-container
-        button#deleteSubmitButton.btn.btn-danger Delete
+        option Select Media File...
+      input#deleteSubmitButton.btn.btn-danger(type='submit', value='Delete')
   script(src='/js/upload.bundle.js')
