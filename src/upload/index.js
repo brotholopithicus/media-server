@@ -5,13 +5,15 @@ const uploadForm = document.querySelector('form#uploadForm');
 const submitButton = document.querySelector('input#submit');
 const fileInput = document.querySelector('input#fileInput');
 const fileControl = document.querySelector('.file-control');
-
+const speed = document.querySelector('.speed');
+const elapsed = document.querySelector('.elapsed');
 fileInput.addEventListener('change', (e) => fileControl.textContent = `${e.target.files.length} files`);
 
 uploadForm.addEventListener('submit', handleFormSubmission);
 
 function handleFormSubmission(e) {
   e.preventDefault();
+  let startTime = Date.now();
   submitButton.disabled = true;
   const formData = new FormData(e.target);
   const xhr = new XMLHttpRequest();
@@ -21,6 +23,10 @@ function handleFormSubmission(e) {
       const progress = Math.round((e.loaded * 100) / e.total);
       progressBar.style.width = `${progress}%`;
       progressBar.textContent = `${progress}%`;
+      const time = (Date.now() - startTime) / 1000;
+      const uploadSpeed = e.loaded / time;
+      speed.textContent = `${(uploadSpeed / (1000 * 1000)).toFixed(2)} MB/s`;
+      elapsed.textContent = `${time.toFixed(1)} s`;
     }
   });
   xhr.upload.addEventListener('load', () => {
