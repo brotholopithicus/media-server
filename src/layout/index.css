@@ -39,6 +39,11 @@ li {
   list-style-type: none;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 nav {
   color: #fff;
   background-color: #2196F3;
@@ -50,15 +55,17 @@ nav a {
 }
 
 nav .nav-wrapper {
-  height: 7vh;
+  height: 10vh;
   display: flex;
   flex-direction: row;
   align-items: center;
+  background: url(../assets/dickbutt.svg) no-repeat center center;
+  background-size: 6vh;
 }
 
 nav .logo {
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.7rem;
   padding: 0 15px;
 }
 
@@ -68,8 +75,8 @@ nav ul {
   flex-direction: row;
   justify-content: flex-end;
   margin: 0;
-  line-height: calc(7vh - 1px);
-  height: 7vh;
+  line-height: calc(10vh - 1px);
+  height: 10vh;
 }
 
 nav ul li {
@@ -84,6 +91,7 @@ nav ul a {
   transition: 0.3s;
   font-size: 1rem;
   width: 10vw;
+  min-width: 4rem;
   text-align: center;
   margin: 0;
   cursor: pointer;

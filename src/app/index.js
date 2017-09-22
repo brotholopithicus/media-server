@@ -1,5 +1,4 @@
 import './index.css';
-import fileTemplate from './templates/file.pug';
 
 const videoList = document.querySelector('.videoList');
 
@@ -30,11 +29,18 @@ function downloadPlayList(url) {
 }
 
 function createAlert(message) {
-  const alertTemplate = require('./templates/alert.pug');
-  const alertHtml = alertTemplate({ message: message });
-  const div = createElement('div', { classes: ['alert-container', 'fade-in'] });
-  div.innerHTML = alertHtml;
-  document.body.appendChild(div);
+  const div = createElement('div', { classes: ['alert-container'] });
+  const alertDiv = createElement('div', { classes: ['alert'] });
+  const alertHeading = createElement('h4', { text: message });
+  alertDiv.append(alertHeading);
+  div.append(alertDiv);
+  document.body.append(div);
+  div.animate([
+    { opacity: 0 },
+    { opacity: 1 },
+    { opacity: 1 },
+    { opacity: 0 }
+  ], { duration: 4000, iterations: 1 });
   setTimeout(() => {
     document.body.removeChild(div);
   }, 4000)

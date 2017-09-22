@@ -117,19 +117,6 @@ table tr>*:first-child {
   border-radius: 0.25rem;
 }
 
-.fade-in {
-  animation: 1s fadeIn;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 a#upload {
   text-decoration: none;
   position: absolute;

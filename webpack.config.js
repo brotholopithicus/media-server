@@ -32,8 +32,13 @@ module.exports = {
         })
       },
       {
-        test: /\.pug$/,
-        loader: 'pug-loader'
+        test: /\.(jpg|jpeg|png|gif|svg)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 8192
+          }
+        }
       }
     ]
   },
