@@ -23,6 +23,7 @@ function handleFormSubmission(e) {
   const xhr = new XMLHttpRequest();
   xhr.open('POST', '/api', true);
   xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+  xhr.setRequestHeader('Expect', '100-continue');
   xhr.upload.addEventListener('progress', (e) => {
     if (e.lengthComputable) {
       const { loaded, total } = e;
