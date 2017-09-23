@@ -10,6 +10,11 @@ const { loadCollection, filter, getLocalAddress, deleteFile } = require('../util
 
 const upload = multer({ dest: `${UPLOAD_PATH}/`, fileFilter: filter.videos });
 
+router.use((req, res, next) => {
+  console.log(req.headers);
+  next();
+});
+
 // post new media
 router.post('/', upload.array('video', 12), async(req, res, next) => {
   try {

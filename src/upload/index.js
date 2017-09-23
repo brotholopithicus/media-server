@@ -8,6 +8,9 @@ const fileControl = document.querySelector('.file-control');
 const speed = document.querySelector('.speed');
 const elapsed = document.querySelector('.elapsed');
 const uploaded = document.querySelector('.uploaded');
+const videoSelect = document.querySelector('select.videoSelect');
+const deleteSubmitButton = document.querySelector('input#deleteSubmitButton');
+const uploadInfo = document.querySelector('.upload-info');
 
 fileInput.addEventListener('change', (e) => fileControl.textContent = `${e.target.files.length} files`);
 
@@ -15,15 +18,19 @@ uploadForm.addEventListener('submit', handleFormSubmission);
 
 const bytesToMb = (bytes) => (bytes * 1e-6).toFixed(2);
 
+function resetUploadInfo() {
+  uploadInfo.childNodes.forEach(child => child.childNodes.forEach(baby => baby.textContent = ''));
+  progressBar.style.width = '0%';
+}
+
 function handleFormSubmission(e) {
   e.preventDefault();
+  if (!fileInput.files.length) return;
   let startTime = Date.now();
   submitButton.disabled = true;
-  const formData = new FormData(e.target);
+  const formData = new FormData(uploadForm);
   const xhr = new XMLHttpRequest();
   xhr.open('POST', '/api', true);
-  xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-  xhr.setRequestHeader('Expect', '100-continue');
   xhr.upload.addEventListener('progress', (e) => {
     if (e.lengthComputable) {
       const { loaded, total } = e;
@@ -39,27 +46,42 @@ function handleFormSubmission(e) {
       uploaded.textContent = `${mbLoaded} MB of ${mbTotal} MB`;
     }
   });
-  xhr.upload.addEventListener('load', () => {
-    window.location.pathname = '/';
+  ['error', 'abort'].forEach(ev => xhr.upload.addEventListener(ev, handleFormSubmissionError));
+  xhr.addEventListener('load', () => {
+    const parentNode = videoSelect.parentNode;
+    const videoSelectClone = videoSelect.cloneNode();
+    fetchFiles().then(files => [createSelectOptionElement(), ...files].forEach(f => videoSelectClone.appendChild(f)));
+    parentNode.replaceChild(videoSelectClone, videoSelect);
+    resetUploadInfo();
+    console.log(JSON.parse(xhr.responseText));
   });
   xhr.send(formData);
 }
 
-const videoSelect = document.querySelector('select.videoSelect');
-const deleteSubmitButton = document.querySelector('input#deleteSubmitButton');
+function handleFormSubmissionError(err) {
+  console.log(err);
+}
 
-fetch('/api')
-  .then(res => res.json())
-  .then(res => {
-    const elements = res.map(file => {
+function fetchFiles() {
+  return new Promise(async(resolve, reject) => {
+    const files = await fetch('/api').then(res => res.json());
+    const elements = files.map(file => {
       const el = document.createElement('option');
       el.value = file.id;
       el.label = file.name;
       return el;
     });
-    elements.forEach(el => videoSelect.appendChild(el));
+    resolve(elements);
   });
+}
+fetchFiles().then(files => files.forEach(f => videoSelect.appendChild(f)));
 
+function createSelectOptionElement() {
+  const opt = document.createElement('option');
+  opt.disabled = true;
+  opt.textContent = 'Select Media File...';
+  return opt;
+}
 deleteSubmitButton.addEventListener('click', handleDeleteSubmitButton)
 
 async function handleDeleteSubmitButton() {
