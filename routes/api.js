@@ -62,6 +62,7 @@ router.get('/video/:id', async(req, res, next) => {
       } else {
         console.log(`All: ${fileSize}`);
         res.writeHead(200, {
+          'Accept-Ranges': 'bytes',
           'Content-Length': fileSize,
           'Content-Type': 'video/mp4'
         });
