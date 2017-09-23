@@ -48,12 +48,16 @@ function handleFormSubmission(e) {
   });
   ['error', 'abort'].forEach(ev => xhr.upload.addEventListener(ev, handleFormSubmissionError));
   xhr.addEventListener('load', () => {
-    const parentNode = videoSelect.parentNode;
-    const videoSelectClone = videoSelect.cloneNode();
+    const vSelect = document.querySelector('.videoSelect');
+    const parentNode = vSelect.parentNode;
+    const videoSelectClone = vSelect.cloneNode();
     fetchFiles().then(files => [createSelectOptionElement(), ...files].forEach(f => videoSelectClone.appendChild(f)));
-    parentNode.replaceChild(videoSelectClone, videoSelect);
+    parentNode.replaceChild(videoSelectClone, vSelect);
     resetUploadInfo();
     console.log(JSON.parse(xhr.responseText));
+    submitButton.disabled = false;
+    fileInput.value = '';
+    fileControl.textContent = 'Choose files...'
   });
   xhr.send(formData);
 }
@@ -74,6 +78,7 @@ function fetchFiles() {
     resolve(elements);
   });
 }
+
 fetchFiles().then(files => files.forEach(f => videoSelect.appendChild(f)));
 
 function createSelectOptionElement() {
@@ -82,19 +87,17 @@ function createSelectOptionElement() {
   opt.textContent = 'Select Media File...';
   return opt;
 }
+
 deleteSubmitButton.addEventListener('click', handleDeleteSubmitButton)
 
 async function handleDeleteSubmitButton() {
-  try {
-    await Promise.all(
-      [...videoSelect.options]
-      .filter(option => option.selected)
-      .map(async(selected) => {
-        await fetch(`/api/video/${selected.value}`, { method: 'DELETE' }).then(res => res.json());
-        videoSelect.removeChild(selected);
-      })
-    );
-  } catch (err) {
-    console.log(err);
-  }
+  const result = await Promise.all([...videoSelect.options].filter(option => option.selected)
+    .map(async selected => {
+      const deleted = await fetchAsync(`/api/video/${selected.value}`, { method: 'DELETE' });
+      return () => document.querySelector('.videoSelect').removeChild(selected);
+    })
+  );
+  result.forEach(fn => fn());
 }
+
+const fetchAsync = async(url, options = {}) => await (await fetch(url, options)).json();

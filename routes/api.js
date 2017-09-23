@@ -10,11 +10,6 @@ const { loadCollection, filter, getLocalAddress, deleteFile } = require('../util
 
 const upload = multer({ dest: `${UPLOAD_PATH}/`, fileFilter: filter.videos });
 
-router.use((req, res, next) => {
-  console.log(req.headers);
-  next();
-});
-
 // post new media
 router.post('/', upload.array('video', 12), async(req, res, next) => {
   try {
@@ -32,7 +27,7 @@ router.delete('/video/:id', async(req, res, next) => {
   try {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const result = collection.get(req.params.id);
-    await deleteFile(path.resolve(result.path));
+    const deleted = await deleteFile(path.resolve(result.path));
     collection.remove(result);
     db.saveDatabase();
     return res.json({ success: true, message: 'delete successful', result });

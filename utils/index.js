@@ -8,7 +8,7 @@ function getLocalAddress() {
 }
 
 function deleteFile(file) {
-  return new Promise((resolve, reject) => fs.unlink(file, (err) => err ? reject(err) : resolve()));
+  return new Promise((resolve, reject) => fs.unlink(file, (err) => err ? reject(err) : resolve(null)));
 }
 
 function cleanDirectory(dirPath) {
