@@ -82,7 +82,7 @@ router.get('/link/:id', async(req, res, next) => {
       'Content-Type': 'application/m3u',
       'Content-Disposition': `attachment; filename='playlist.vlc'`
     });
-    res.write(`#EXTM3U\nhttp://${req.hostname}:3000/api/video/${req.params.id}`);
+    res.write(`#EXTM3U\nhttps://${req.hostname}/api/video/${req.params.id}`);
     res.end();
   } catch (err) {
     return res.json({ sucess: false, message: err.message });
