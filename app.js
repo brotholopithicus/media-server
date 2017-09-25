@@ -17,8 +17,9 @@ const api = require('./routes/api');
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'pug');
+app.set('trust proxy', true);
 
 if (process.env.NODE_ENV === 'development') {
   const webpackDevMiddleware = require('webpack-dev-middleware');

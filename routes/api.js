@@ -6,15 +6,29 @@ const router = require('express').Router();
 const multer = require('multer');
 
 const { DB_NAME, COLLECTION_NAME, db, UPLOAD_PATH } = require('../config');
-const { loadCollection, filter, getLocalAddress, deleteFile } = require('../utils');
+const { loadCollection, filter, getLocalAddress, deleteFile, requestify } = require('../utils');
 
 const upload = multer({ dest: `${UPLOAD_PATH}/`, fileFilter: filter.videos });
+
+async function getEpisodeDetails(file) {
+  const info = file.originalname.split('.').find(x => x.charAt(0) === 'S');
+  const show = file.originalname.split('S')[0].replace(/\./g, ' ').trim();
+  const [s, e] = [parseInt(info.slice(1, 3)), parseInt(info.slice(4, 6))];
+  const { id } = await axios.get('http://api.tvmaze.com/singlesearch/shows?q=' + show).then(r => r.data);
+  const episodeInfo = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`).then(r => r.data);
+  const { name, season, number, image, summary } = episodeInfo.find(ep => ep.season === s && ep.number === e);
+  return { title: show, name, season, number, image: image.original, summary };
+}
 
 // post new media
 router.post('/', upload.array('video', 12), async(req, res, next) => {
   try {
     const collection = await loadCollection(COLLECTION_NAME, db);
-    const data = req.files.map(file => collection.insert(file));
+    const data = await Promise.all(req.files.map(async file => {
+      file.info = await getEpisodeDetails(file);
+      collection.insert(file);
+      return file;
+    }));
     db.saveDatabase();
     return res.json({ success: true, message: 'upload successful', data });
   } catch (err) {
@@ -82,20 +96,22 @@ router.get('/link/:id', async(req, res, next) => {
       'Content-Type': 'application/m3u',
       'Content-Disposition': `attachment; filename='playlist.vlc'`
     });
-    res.write(`#EXTM3U\nhttps://${req.hostname}/api/video/${req.params.id}`);
+    res.write(`#EXTM3U\n${req.protocol}://${req.hostname}:${process.env.PORT}/api/video/${req.params.id}`);
     res.end();
   } catch (err) {
     return res.json({ sucess: false, message: err.message });
   }
 });
 
+const axios = require('axios');
+
 // get all media
 router.get('/', async(req, res, next) => {
   try {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const data = collection.data.map(file => {
-      const { $loki, originalname, encoding, mimetype, size } = file;
-      return { id: $loki, name: originalname, encoding, mimetype, size, addr: req.hostname };
+      const { $loki, originalname, encoding, mimetype, size, info } = file;
+      return { id: $loki, name: originalname, encoding, mimetype, size, addr: `${req.hostname}:${process.env.PORT}`, protocol: req.protocol, info };
     });
     return res.json(data);
   } catch (err) {

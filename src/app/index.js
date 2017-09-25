@@ -4,28 +4,47 @@ const videoList = document.querySelector('.videoList');
 
 fetch('/api')
   .then(res => res.json())
+  .then(res => res.sort((a, b) => {
+    [a, b] = [a.name.toLowerCase(), b.name.toLowerCase()];
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }))
   .then(res => {
     res.forEach((file, index) => {
       const row = document.createElement('tr');
       row.dataset.file = JSON.stringify(Object.assign({}, file, { num: index + 1 }));
       const num = createElement('th', { text: index + 1 });
-      const name = createElement('td', { text: file.name, classe: ['name'] });
-      const mimetype = createElement('td', { text: file.mimetype });
+      const name = createElement('td', { text: file.name, classes: ['name'] });
+      const mimetype = createElement('td', { text: file.info ? file.info.summary : file.mimetype });
       const size = createElement('td', { text: (parseInt(file.size) / (1000 * 1000)).toFixed(2) + ' MB' });
       const download = createElement('td', { text: '↓', classes: ['watch'] });
       const copyLink = createElement('td', { text: '✂', classes: ['copy'] });
-      download.addEventListener('click', () => downloadPlayList(`https://${file.addr}/api/link/${file.id}`));
-      copyLink.addEventListener('click', () => copyTextToClipboard(`https://${file.addr}/api/video/${file.id}`));
+      download.addEventListener('click', () => downloadPlayList(`${file.protocol}://${file.addr}/api/link/${file.id}`));
+      copyLink.addEventListener('click', () => copyTextToClipboard(`${file.protocol}://${file.addr}/api/video/${file.id}`));
       [num, name, mimetype, size, download, copyLink].forEach(el => row.appendChild(el));
       videoList.appendChild(row);
     })
   });
 
-function downloadPlayList(url) {
-  const a = createElement('a');
-  a.href = url;
-  a.click();
-  createAlert('Downloading Playlist');
+async function downloadPlayList(addr) {
+  try {
+    const data = await fetch(addr).then(res => res.blob());
+    const a = createElement('a');
+    const url = URL.createObjectURL(data);
+    a.href = url;
+    a.download = 'playlist.vlc';
+    a.click();
+    URL.revokeObjectURL(url);
+    createAlert('Downloaded Playlist');
+  } catch (err) {
+    console.log(err);
+    createAlert('Error Downloading Playlist');
+  }
 }
 
 function createAlert(message) {
