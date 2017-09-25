@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     layout: './src/layout',
     app: ['babel-polyfill', './src/app'],
-    upload: ['babel-polyfill', './src/upload']
+    upload: ['babel-polyfill', './src/upload'],
+    files: ['babel-polyfill', './src/files']
   },
   output: {
     path: path.resolve(__dirname, 'public'),
@@ -20,7 +21,10 @@ module.exports = {
         use: [{
           loader: 'babel-loader',
           options: {
-            presets: ['env']
+            presets: ['env'],
+            plugins: [
+              ['transform-react-jsx', { pragma: 'h' }]
+            ]
           }
         }]
       },
