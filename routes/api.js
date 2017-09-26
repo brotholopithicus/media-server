@@ -89,7 +89,7 @@ router.get('/video/:id', async(req, res, next) => {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const result = collection.get(req.params.id);
     return result ? (() => {
-      const filePath = path.resolve(__dirname, '..', result.path);
+      const filePath = path.resolve(__dirname, '..', result.path + '.mp4');
       const fileSize = fs.statSync(filePath).size;
       const range = req.headers.range;
       if (range) {
