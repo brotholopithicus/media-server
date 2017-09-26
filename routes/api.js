@@ -50,7 +50,7 @@ router.delete('/video/:id', async(req, res, next) => {
   }
 });
 
-router.get('/video/info/:id', (req, res, next) => {
+router.get('/video/info/:id', async (req, res, next) => {
   try {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const result = collection.get(req.params.id);
