@@ -50,6 +50,16 @@ router.delete('/video/:id', async(req, res, next) => {
   }
 });
 
+router.get('/video/info/:id', (req, res, next) => {
+  try {
+    const collection = await loadCollection(COLLECTION_NAME, db);
+    const result = collection.get(req.params.id);
+    return res.json({ success: true, result });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
+});
+
 router.get('/video/transcode/:id', async(req, res, next) => {
   try {
     const collection = await loadCollection(COLLECTION_NAME, db);
