@@ -50,6 +50,40 @@ router.delete('/video/:id', async(req, res, next) => {
   }
 });
 
+router.get('/video/transcode/:id', async(req, res, next) => {
+  try {
+    const collection = await loadCollection(COLLECTION_NAME, db);
+    const result = collection.get(req.params.id);
+    return result ? (() => {
+      const filePath = path.resolve(__dirname, '..', result.path);
+      const fileSize = fs.statSync(filePath).size;
+      res.writeHead(200, {
+        'Content-Type': 'video/mp4',
+        'Content-Length': fileSize,
+        'Transfer-Encoding': 'chunked'
+      });
+      const ffmpeg = spawn('ffmpeg', [
+        '-i', filePath,
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-movflags', 'faststart+frag_keyframe',
+        '-strict', 'experimental',
+        '-f', 'mp4',
+        'pipe:1'
+      ]);
+      ffmpeg.on('exit', () => console.log(`ffmpeg exit`));
+      ffmpeg.stderr.setEncoding('utf8');
+      ffmpeg.stderr.on('data', (data) => console.error(data));
+      req.on('close', () => {
+        ffmpeg.kill();
+      });
+      return ffmpeg.stdout.pipe(res);
+    })() : res.json({ success: false, message: `Video with id ${req.params.id} does not exist.` });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
+});
+
 router.get('/video/:id', async(req, res, next) => {
   try {
     const collection = await loadCollection(COLLECTION_NAME, db);
