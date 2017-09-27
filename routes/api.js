@@ -14,10 +14,10 @@ async function getEpisodeDetails(file) {
   const info = file.originalname.split('.').find(x => x.charAt(0) === 'S');
   const show = file.originalname.split('S')[0].replace(/\./g, ' ').trim();
   const [s, e] = [parseInt(info.slice(1, 3)), parseInt(info.slice(4, 6))];
-  const { id } = await axios.get('http://api.tvmaze.com/singlesearch/shows?q=' + show).then(r => r.data);
+  const { name: title, id, image: showImage } = await axios.get('http://api.tvmaze.com/singlesearch/shows?q=' + show).then(r => r.data);
   const episodeInfo = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`).then(r => r.data);
   const { name, season, number, image, summary } = episodeInfo.find(ep => ep.season === s && ep.number === e);
-  return { title: show, name, season, number, image: image.original, summary };
+  return { title, name, season, number, image: image ? image.original : showImage.original, summary };
 }
 
 // post new media
@@ -50,7 +50,7 @@ router.delete('/video/:id', async(req, res, next) => {
   }
 });
 
-router.get('/video/info/:id', async (req, res, next) => {
+router.get('/video/info/:id', async(req, res, next) => {
   try {
     const collection = await loadCollection(COLLECTION_NAME, db);
     const result = collection.get(req.params.id);
