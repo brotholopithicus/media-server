@@ -11,9 +11,9 @@ const { loadCollection, filter, getLocalAddress, deleteFile, requestify } = requ
 const upload = multer({ dest: `${UPLOAD_PATH}/`, fileFilter: filter.videos });
 
 async function getEpisodeDetails(file) {
-  const info = file.originalname.split('.').find(x => x.charAt(0) === 'S');
-  const show = file.originalname.split('S')[0].replace(/\./g, ' ').trim();
-  const [s, e] = [parseInt(info.slice(1, 3)), parseInt(info.slice(4, 6))];
+  const info = str.match(/(S..E..)/g)[0];
+  const show = str.split(info)[0].replace(/\./g, ' ').trim();
+  const [s, e] = [info.slice(1, 3), info.slice(4, 6)].map(x => parseInt(x));
   const { name: title, id, image: showImage } = await axios.get('http://api.tvmaze.com/singlesearch/shows?q=' + show).then(r => r.data);
   const episodeInfo = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`).then(r => r.data);
   const { name, season, number, image, summary } = episodeInfo.find(ep => ep.season === s && ep.number === e);
